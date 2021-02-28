@@ -139,4 +139,136 @@ class StatTracker
     team_deets
   end
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Name of the team with the highest
+#average number of goals scored per game across all seasons.
+# average numebr of goals per game by team
+#
+
+
+
+  def count_of_games_by_season
+    game_count = games_data.group_by do |game|
+      game[:season]
+    end
+    final = game_count.transform_values { |season| season.length}
+  end
+
+  def best_offense
+    grouped = Hash.new{|hash, key| hash[key] = []}
+    game_teams_data.each do |game_team|
+      grouped[game_team[:team_id]] << game_team[:goals].to_i
+    end
+    avg_score = grouped.map { |k,v| [k, (v.sum / v.count.to_f) ]}
+    max_avg = avg_score.max_by do |team, score|
+      score
+    end
+    team_name = team_data.find do |team|
+      team[:team_id] == max_avg[0]
+    end
+    team_name[:teamname]
+  end
 end
