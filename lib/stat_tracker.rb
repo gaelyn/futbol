@@ -45,27 +45,22 @@ class StatTracker
   end
 
   def percentage_home_wins
-    number_home_wins = game_teams_data.find_all do |game|
-      (game[:hoa] == "home") && (game[:result] == "WIN")
-    end.size.to_f
-
-    all_games = games_data.find_all do |game|
-      game
-    end.size
-
-    (number_home_wins / all_games).round(2)
+    (number_of_wins("home") / all_games.size).round(2)
   end
 
   def percentage_visitor_wins
-    number_visitor_wins = game_teams_data.find_all do |game|
-      (game[:hoa] == "away") && (game[:result] == "WIN")
+    (number_of_wins("away") / all_games.size).round(2)
+  end
+
+  def number_of_wins(home_or_away)
+    return false unless ["home", "away"].include?(home_or_away)
+    game_teams_data.find_all do |game|
+      (game[:hoa] == home_or_away) && (game[:result] == "WIN")
     end.size.to_f
+  end
 
-    all_games = games_data.find_all do |game|
-      game
-    end.size
-
-    (number_visitor_wins / all_games).round(2)
+  def all_games
+    games_data.find_all {|game| game}
   end
 
   def percentage_ties
@@ -241,14 +236,12 @@ class StatTracker
   end
 
   def most_accurate_team(season_id)
-    result = []
-    games_data.each do |game|
-      result << game[:game_id] if game[:season] == season_id
-    end
+    result = games_grouped_by_season[season_id]
+
     hash = {}
     game_teams_data.each do |game_team|
       result.each do |game|
-        if game == game_team[:game_id]
+        if game[:game_id] == game_team[:game_id]
           hash[game_team[:team_id]] = [] if hash[game_team[:team_id]].nil?
           calculation = game_team[:goals].to_f / (game_team[:shots].to_f)
           hash[game_team[:team_id]] << calculation
@@ -262,14 +255,12 @@ class StatTracker
   end
 
   def least_accurate_team(season_id)
-    result = []
-    games_data.each do |game|
-      result << game[:game_id] if game[:season] == season_id
-    end
+    result = games_grouped_by_season[season_id]
+
     hash = {}
     game_teams_data.each do |game_team|
       result.each do |game|
-        if game == game_team[:game_id]
+        if game[:game_id] == game_team[:game_id]
           hash[game_team[:team_id]] = [] if hash[game_team[:team_id]].nil?
           calculation = game_team[:goals].to_f / (game_team[:shots].to_f)
           hash[game_team[:team_id]] << calculation
@@ -280,6 +271,12 @@ class StatTracker
     least_accurate = transformed.min_by {|key, value| value}
     final = team_data.find {|team| team[:team_id] == least_accurate[0]}
     final[:teamname]
+  end
+
+  def games_grouped_by_season
+    games_data.group_by do |game|
+      game[:season]
+    end
   end
 
   def most_tackles(season_id)
@@ -408,7 +405,7 @@ class StatTracker
     end
     least_wins[0]
     end
-  end
+
 
   def average_win_percentage(team_id)
     game_results = []
@@ -483,3 +480,4 @@ class StatTracker
     find_team = team_data.find { |team| team[:team_id] == most_wins[0] }
     find_team[:teamname]
   end
+end
