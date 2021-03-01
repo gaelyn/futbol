@@ -45,27 +45,22 @@ class StatTracker
   end
 
   def percentage_home_wins
-    number_home_wins = game_teams_data.find_all do |game|
-      (game[:hoa] == "home") && (game[:result] == "WIN")
-    end.size.to_f
-
-    all_games = games_data.find_all do |game|
-      game
-    end.size
-
-    (number_home_wins / all_games).round(2)
+    (number_of_wins("home") / all_games.size).round(2)
   end
 
   def percentage_visitor_wins
-    number_visitor_wins = game_teams_data.find_all do |game|
-      (game[:hoa] == "away") && (game[:result] == "WIN")
+    (number_of_wins("away") / all_games.size).round(2)
+  end
+
+  def number_of_wins(home_or_away)
+    return false unless ["home", "away"].include?(home_or_away)
+    game_teams_data.find_all do |game|
+      (game[:hoa] == home_or_away) && (game[:result] == "WIN")
     end.size.to_f
+  end
 
-    all_games = games_data.find_all do |game|
-      game
-    end.size
-
-    (number_visitor_wins / all_games).round(2)
+  def all_games
+    games_data.find_all {|game| game}
   end
 
   def percentage_ties

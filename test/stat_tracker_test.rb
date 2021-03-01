@@ -19,28 +19,28 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_exists
-    skip
+    # skip
     assert_instance_of StatTracker, @stat_tracker
   end
 
   # Game Statistics Tests
   def test_it_can_find_highest_score
-    skip
+    # skip
     assert_equal 11, @stat_tracker.highest_total_score
   end
 
   def test_you_can_find_lowest_total_score
-    skip
+    # skip
     assert_equal 0, @stat_tracker.lowest_total_score
   end
 
   def test_percentage_of_home_wins
-    skip
+    # skip
     assert_equal 0.44, @stat_tracker.percentage_home_wins
   end
 
   def test_percentage_of_visitor_wins
-    skip
+    # skip
     assert_equal 0.36, @stat_tracker.percentage_visitor_wins
   end
 
