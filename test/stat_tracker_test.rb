@@ -45,12 +45,12 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_percentage_ties
-    skip
+    # skip
     assert_equal 0.20, @stat_tracker.percentage_ties
   end
 
   def test_count_games_by_season
-    skip
+    # skip
     expected = {
       "20122013"=>806,
       "20162017"=>1317,
@@ -63,12 +63,12 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_average_goals_per_game
-    skip
+    # skip
     assert_equal 4.22, @stat_tracker.average_goals_per_game
   end
 
   def test_average_goals_by_season
-    skip
+    # skip
     expected = {
       "20122013"=>4.12,
       "20162017"=>4.23,
@@ -83,85 +83,85 @@ class StatTrackerTest < Minitest::Test
 
   #League Statistics Tests
   def test_it_can_count_number_of_teams
-    skip
+    # skip
     assert_equal 32, @stat_tracker.count_of_teams
   end
 
   def test_it_can_calculate_best_offense
-    skip
+    # skip
     assert_equal "Reign FC", @stat_tracker.best_offense
   end
 
   def test_it_can_calculate_worst_offense
-        skip
+        # skip
     assert_equal "Utah Royals FC", @stat_tracker.worst_offense
   end
 
   def test_highest_scoring_visitor
-    skip
+    # skip
     assert_equal "FC Dallas", @stat_tracker.highest_scoring_visitor
   end
 
   def test_highest_scoring_home_team
-    skip
+    # skip
     assert_equal "Reign FC", @stat_tracker.highest_scoring_home_team
   end
 
   def test_lowest_scoring_visitor
-    skip
+    # skip
     assert_equal "San Jose Earthquakes", @stat_tracker.lowest_scoring_visitor
   end
 
   def test_lowest_scoring_home_team
-    skip
+    # skip
     assert_equal "Utah Royals FC", @stat_tracker.lowest_scoring_home_team
   end
 
   #Season Statistics
 
   def test_winningest_coach
-    skip
+    # skip
     assert_equal "Claude Julien", @stat_tracker.winningest_coach("20132014")
     assert_equal "Alain Vigneault", @stat_tracker.winningest_coach("20142015")
   end
 
   def test_worst_coach
-    skip
+    # skip
     name = "Ted Nolan"
     assert_equal "Peter Laviolette", @stat_tracker.worst_coach("20132014")
     assert_equal name, @stat_tracker.worst_coach("20142015")
   end
 
   def test_most_accurate_team
-    skip
+    # skip
     assert_equal "Real Salt Lake", @stat_tracker.most_accurate_team("20132014")
     # This second assertion refuses to pass - I am figuring it out.
     # Weird thing is least_accurate_team passes - I only changed min_by and such
     # Someone could take a look at it?
-    # assert_equal "Toronto FC", @stat_tracker.most_accurate_team("20142015")
+    assert_equal "Toronto FC", @stat_tracker.most_accurate_team("20142015")
   end
 
   def test_least_accurate_team
-    skip
+    # skip
     assert_equal "New York City FC", @stat_tracker.least_accurate_team("20132014")
     assert_equal "Columbus Crew SC", @stat_tracker.least_accurate_team("20142015")
   end
 
   def test_it_can_name_team_with_most_tackles
-    skip
+    # skip
     assert_equal "FC Cincinnati", @stat_tracker.most_tackles("20132014")
     assert_equal "Seattle Sounders FC", @stat_tracker.most_tackles("20142015")
   end
 
   def test_fewest_tackles
-    skip
+    # skip
     assert_equal "Atlanta United", @stat_tracker.fewest_tackles("20132014")
     assert_equal "Orlando City SC", @stat_tracker.fewest_tackles("20142015")
   end
 
   #Team Statistics
   def test_it_can_list_team_info
-    skip
+    # skip
 
     expected = {
      "team_id" => "18",
@@ -189,22 +189,22 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_most_goals_scored
-    skip
+    # skip
     assert_equal 7, @stat_tracker.most_goals_scored("18")
   end
 
   def test_fewest_goals_scored
-    skip
+    # skip
     assert_equal 0, @stat_tracker.fewest_goals_scored("18")
   end
 
   def test_it_can_have_a_favorite_opponent
-    skip
+    # skip
     assert_equal "DC United", @stat_tracker.favorite_opponent("18")
   end
 
   def test_it_has_a_rival
-    skip
+    # skip
     # assert_equal "Houston Dash", @stat_tracker.rival("18")
     assert_equal "LA Galaxy", @stat_tracker.rival("18")
   end
