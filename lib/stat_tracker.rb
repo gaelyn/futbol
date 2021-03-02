@@ -357,15 +357,18 @@ class StatTracker
     least_wins = season_count.min_by {|season, count| count}
     least_wins[0]
   end
-
-  def game_result_by_team_i
-
-  def average_win_percentage(team_id)
+ # Need test
+  def game_result_by_team_id(team_id)
     game_results = []
     game_teams_data.each do |row|
       game_results << row[:result] if row[:team_id] == team_id
     end
-    win_bucket = (game_results.count("WIN") / game_results.length.to_f).round(2)
+    game_results
+  end
+
+  def average_win_percentage(team_id)
+    game_result = game_result_by_team_id(team_id)
+    (game_result.count("WIN").fdiv(game_result.length)).round(2)
   end
 
   def most_goals_scored(team_id)
