@@ -6,27 +6,43 @@ class StatTracker
               :team_data,
               :game_teams_data
 
-  def initialize(locations)
-    # @locations = locations
-    @games_data = CSV.parse(File.read('./data/games.csv'), headers: true, header_converters: :symbol)
-    @team_data = CSV.parse(File.read('./data/teams.csv'), headers: true, header_converters: :symbol)
-    @game_teams_data = CSV.parse(File.read('./data/game_teams.csv'), headers: true, header_converters: :symbol)
-    # @team_manager = TeamsManager.new(CSV.parse(File.read(locations[:teams]), headers: true, header_converters: :symbol), self)
-    # @games_manager = GamesManager.new(CSV.parse(File.read(locations[:games]), headers: true, header_converters: :symbol), self)
-    # @game_team_manager = GameTeamsManager.new(CSV.parse(File.read(locations[:game_teams]), headers: true, header_converters: :symbol), self)
-  end
+  # def initialize(locations)
+  #   # @locations = locations
+    # @games_data = CSV.parse(File.read('./data/games.csv'), headers: true, header_converters: :symbol)
+  #   @team_data = CSV.parse(File.read('./data/teams.csv'), headers: true, header_converters: :symbol)
+  #   @game_teams_data = CSV.parse(File.read('./data/game_teams.csv'), headers: true, header_converters: :symbol)
+  #   # @team_manager = TeamsManager.new(CSV.parse(File.read(locations[:teams]), headers: true, header_converters: :symbol), self)
+  #   # @games_manager = GamesManager.new(CSV.parse(File.read(locations[:games]), headers: true, header_converters: :symbol), self)
+  #   # @game_team_manager = GameTeamsManager.new(CSV.parse(File.read(locations[:game_teams]), headers: true, header_converters: :symbol), self)
+  # end
 
   def self.from_csv(locations)
     StatTracker.new(locations)
   end
 
+  def initialize(locations)
+    load_manager(locations)
+  end
+
+  def load_manager(locations)
+   # @team_manager = TeamManager.new(load_csv(locations[:teams]), self)
+   @game_manager = GameManager.new(load_csv(locations[:games]), self)
+   # @game_team_manager = GameTeamManager.new(load_csv(locations[:game_teams]), self)
+ end
+
+ def load_csv(path)
+    CSV.parse(File.read(path), headers: true, header_converters: :symbol)
+  end
+
 # Game Statistics ##################################
   def highest_total_score
-    find_total_goals_per_game.max_by {|goals| goals}
+    # find_total_goals_per_game.max_by {|goals| goals}
+    @game_manager.highest_total_score
   end
 
   def lowest_total_score
-    find_total_goals_per_game.min_by {|goals| goals}
+    # find_total_goals_per_game.min_by {|goals| goals}
+    @game_manager.lowest_total_score
   end
 
   # Need Test
@@ -380,8 +396,6 @@ class StatTracker
     goals = games_by_team_id[team_id].min_by {|result| result[:goals]}
     goals[:goals].to_i
   end
-
-  ~*~*~ V i B e Z ~d(*_*)b~ V i B e Z ~*~*~
 
   def favorite_opponent(id)
     game_id = []
