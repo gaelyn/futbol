@@ -186,7 +186,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_average_win_percentage
-    # skip
+    skip
     assert_equal 0.49, @stat_tracker.average_win_percentage("6")
   end
 
@@ -201,7 +201,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_have_a_favorite_opponent
-    skip
+    # skip
     assert_equal "DC United", @stat_tracker.favorite_opponent("18")
   end
 
