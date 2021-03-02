@@ -372,13 +372,8 @@ class StatTracker
   end
 
   def most_goals_scored(team_id)
-    team_result = []
-    game_teams_data.each do |games|
-      team_result << games if games[:team_id] == team_id
-    end
-    goals = team_result.max_by do |result|
-      result[:goals]
-    end[:goals].to_i
+    goals = games_by_team_id[team_id].max_by {|result| result[:goals]}
+    goals[:goals].to_i
   end
 
   def fewest_goals_scored(team_id)
