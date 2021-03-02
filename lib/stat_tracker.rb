@@ -22,26 +22,35 @@ class StatTracker
 
 # Game Statistics ##################################
   def highest_total_score
-    # games_data = CSV.parse(File.read('./dummy_data/games_dummy.csv'), headers: true, header_converters: :symbol)
-    highest_score = 0
-    games_data.each do |game|
-      sum = game[:home_goals].to_i + game[:away_goals].to_i
-      if sum > highest_score
-        highest_score = sum
-      end
-    end
-    highest_score
+    find_total_goals_per_game.max_by {|goals| goals}
+  end
+
+  def find_total_goals_per_game
+    games_data.map {|game| game[:home_goals].to_i + game[:away_goals].to_i}
+  end
+
+  # Need Test
+  def find_highest_home_team_score
+    result = games_data.max_by {|game| game[:home_goals]}
+    result[:home_goals].to_i
+  end
+
+  # Need Test
+  def find_highest_away_team_score
+    result = games_data.max_by {|game| game[:away_goals]}
+    result[:away_goals].to_i
   end
 
   def lowest_total_score
-    lowest_score = 100
-    games_data.each do |game|
-      sum = game[:home_goals].to_i + game[:away_goals].to_i
-      if sum < lowest_score
-        lowest_score = sum
-      end
-    end
-    lowest_score
+    find_total_goals_per_game.min_by {|goals| goals}
+    # lowest_score = 100
+    # games_data.each do |game|
+    #   sum = game[:home_goals].to_i + game[:away_goals].to_i
+    #   if sum < lowest_score
+    #     lowest_score = sum
+    #   end
+    # end
+    # lowest_score
   end
 
   def percentage_home_wins
