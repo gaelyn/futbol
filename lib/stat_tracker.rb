@@ -109,39 +109,40 @@ class StatTracker
     average = goals_grouped_by_team_id.map {|team_id, goals| [team_id, (goals.sum / goals.count.to_f)]}
     max_avg = average.max_by {|team, score| score}
     return_team_name_by_id(max_avg[0])
-    # team_name = team_data.find do |team|
-    #   team[:team_id] == max_avg[0]
-    # end
-    # team_name[:teamname]
   end
 
   def worst_offense
     avg_score = goals_grouped_by_team_id.map {|team_id, goals| [team_id, (goals.sum / goals.count.to_f)]}
     min_avg = avg_score.min_by {|team, score| score}
     return_team_name_by_id(min_avg[0])
-    # team_name = team_data.find do |team|
-    #   team[:team_id] == min_avg[0]
-    # end
-    # team_name[:teamname]
   end
 
+  # Need test
   def return_team_name_by_id(id)
     result = team_data.find {|team| team[:team_id] == id}
     result[:teamname]
   end
 
-  def highest_scoring_visitor
+  def away_goals_by_away_team_id
     grouped = {}
     games_data.each do |game|
       grouped[game[:away_team_id]] = [] if grouped[game[:away_team_id]].nil?
       grouped[game[:away_team_id]] << game[:away_goals].to_f
     end
-    averaged = grouped.transform_values do |values|
+    grouped
+  end
+
+  def highest_scoring_visitor
+    # grouped = {}
+    # games_data.each do |game|
+    #   grouped[game[:away_team_id]] = [] if grouped[game[:away_team_id]].nil?
+    #   grouped[game[:away_team_id]] << game[:away_goals].to_f
+    # end
+    averaged = away_goals_by_away_team_id.transform_values do |values|
       (values.sum / values.length).round(2)
     end
     result = averaged.max_by {|key, value| value}
-    find_team = team_data.find {|team| team[:team_id] == result[0]}
-    find_team[:teamname]
+    return_team_name_by_id(result[0])
   end
 
   def highest_scoring_home_team
@@ -154,8 +155,7 @@ class StatTracker
       (values.sum / values.length).round(2)
     end
     result = averaged.max_by {|key, value| value}
-    find_team = team_data.find {|team| team[:team_id] == result[0]}
-    find_team[:teamname]
+    return_team_name_by_id(result[0])
   end
 
   def lowest_scoring_visitor
@@ -168,8 +168,7 @@ class StatTracker
       (values.sum / values.length).round(2)
     end
     result = averaged.min_by {|key, value| value}
-    find_team = team_data.find {|team| team[:team_id] == result[0]}
-    find_team[:teamname]
+    return_team_name_by_id(result[0])
   end
 
   def lowest_scoring_home_team
@@ -182,8 +181,7 @@ class StatTracker
       (values.sum / values.length).round(2)
     end
     result = averaged.min_by {|key, value| value}
-    find_team = team_data.find {|team| team[:team_id] == result[0]}
-    find_team[:teamname]
+    return_team_name_by_id(result[0])
   end
 
   # Season Statistics #########################
