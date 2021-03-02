@@ -333,7 +333,7 @@ class StatTracker
   def game_ids_by_team_id(team_id)
     wins_by_team_id(team_id).map {|game| game[:game_id]}
   end
-
+  # Need test
   def season_by_game_id(team_id)
     games_by_id = []
     game_ids_by_team_id(team_id).each do |id|
@@ -352,39 +352,13 @@ class StatTracker
   end
 
   def worst_season(team_id)
-    games_by_team = game_teams_data.find_all do |game|
-      game[:team_id] == team_id
-    end
-
-    wins = games_by_team.find_all do |game|
-      game[:result] == "WIN"
-    end
-
-    game_ids = wins.map do |game|
-      game[:game_id]
-    end
-
-    games_by_id = []
-    game_ids.each do |id|
-      games_data.each do |game|
-        if game[:game_id] == id
-          games_by_id << game[:season]
-        end
-      end
-    end
-
-    seasons = games_by_id.group_by do |season|
-      season
-    end
-    season_count = seasons.transform_values do |value|
-      value.count
-    end
-    least_wins = season_count.min_by do |season, count|
-      count
-    end
+    seasons = season_by_game_id(team_id).group_by {|season| season}
+    season_count = seasons.transform_values {|value| value.count}
+    least_wins = season_count.min_by {|season, count| count}
     least_wins[0]
-    end
+  end
 
+  def game_result_by_team_i
 
   def average_win_percentage(team_id)
     game_results = []
