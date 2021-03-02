@@ -174,6 +174,7 @@ class StatTracker
   end
 
   # Season Statistics #########################
+  # Need test
   def list_game_id_by_season_id(season_id)
     game_id = []
     games_data.each do |game|
@@ -183,11 +184,6 @@ class StatTracker
   end
 
   def winningest_coach(season_id)
-    # require "pry";binding.pry
-    # season = []
-    # games_data.each do |game|
-      # season << game[:game_id] if game[:season] == season_id
-    # end
     game_ids = list_game_id_by_season_id(season_id)
     result = {}
     game_teams_data.each do |game_team|
@@ -206,13 +202,10 @@ class StatTracker
   end
 
   def worst_coach(season_id)
-    season = []
-    games_data.each do |game|
-      season << game[:game_id] if game[:season] == season_id
-    end
+    game_ids = list_game_id_by_season_id(season_id)
     result = {}
     game_teams_data.each do |game_team|
-      season.each do |game_id|
+      game_id.each do |game_id|
         if game_id == game_team[:game_id]
           result[game_team[:head_coach]] = [] if result[game_team[:head_coach]].nil?
           result[game_team[:head_coach]] << game_team[:result]
@@ -326,38 +319,35 @@ class StatTracker
     team_deets.delete("franchiseId")
     team_deets
   end
-
-  def best_season(team_id)
-    games_by_team = game_teams_data.find_all do |game|
-      game[:team_id] == team_id
+  # Need test
+  def games_by_team_id
+    game_teams_data.group_by do |game|
+      game[:team_id]
     end
+  end
+  # Need test
+  def wins_by_team_id(team_id)
+    games_by_team_id[team_id].find_all {|game| game[:result] == "WIN"}
+  end
+  # Need test
+  def game_ids_by_team_id(team_id)
+    wins_by_team_id(team_id).map {|game| game[:game_id]}
+  end
 
-    wins = games_by_team.find_all do |game|
-      game[:result] == "WIN"
-    end
-
-    game_ids = wins.map do |game|
-      game[:game_id]
-    end
-
+  def season_by_game_id(team_id)
     games_by_id = []
-    game_ids.each do |id|
+    game_ids_by_team_id(team_id).each do |id|
       games_data.each do |game|
-        if game[:game_id] == id
-          games_by_id << game[:season]
-        end
+        games_by_id << game[:season] if game[:game_id] == id
       end
     end
+    games_by_id
+  end
 
-    seasons = games_by_id.group_by do |season|
-      season
-    end
-    season_count = seasons.transform_values do |value|
-      value.count
-    end
-    most_wins = season_count.max_by do |season, count|
-      count
-    end
+  def best_season(team_id)
+    seasons = season_by_game_id(team_id).group_by {|season| season}
+    season_count = seasons.transform_values {|value| value.count}
+    most_wins = season_count.max_by {|season, count| count}
     most_wins[0]
   end
 
