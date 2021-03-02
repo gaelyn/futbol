@@ -96,7 +96,7 @@ class StatTracker
     number_of_teams = team_data.map {|team| team}
     number_of_teams.count
   end
-
+  # Need test
   def goals_grouped_by_team_id
     grouped = Hash.new{|hash, key| hash[key] = []}
     game_teams_data.each do |game_team|
@@ -108,28 +108,26 @@ class StatTracker
   def best_offense
     average = goals_grouped_by_team_id.map {|team_id, goals| [team_id, (goals.sum / goals.count.to_f)]}
     max_avg = average.max_by {|team, score| score}
-    team_name = team_data.find do |team|
-      team[:team_id] == max_avg[0]
-    end
-    team_name[:teamname]
+    return_team_name_by_id(max_avg[0])
+    # team_name = team_data.find do |team|
+    #   team[:team_id] == max_avg[0]
+    # end
+    # team_name[:teamname]
   end
 
   def worst_offense
-    grouped = Hash.new{|hash, key| hash[key] = []}
-    game_teams_data.each do |game_team|
-      grouped[game_team[:team_id]] << game_team[:goals].to_i
-    end
+    avg_score = goals_grouped_by_team_id.map {|team_id, goals| [team_id, (goals.sum / goals.count.to_f)]}
+    min_avg = avg_score.min_by {|team, score| score}
+    return_team_name_by_id(min_avg[0])
+    # team_name = team_data.find do |team|
+    #   team[:team_id] == min_avg[0]
+    # end
+    # team_name[:teamname]
+  end
 
-    avg_score = grouped.map { |team_id, goals| [team_id, (goals.sum / goals.count.to_f) ]}
-
-    min_avg = avg_score.min_by do |team, score|
-      score
-    end
-
-    team_name = team_data.find do |team|
-      team[:team_id] == min_avg[0]
-    end
-    team_name[:teamname]
+  def return_team_name_by_id(id)
+    result = team_data.find {|team| team[:team_id] == id}
+    result[:teamname]
   end
 
   def highest_scoring_visitor
