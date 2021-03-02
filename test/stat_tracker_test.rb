@@ -98,29 +98,29 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_highest_scoring_visitor
-    # skip
+    skip
     assert_equal "FC Dallas", @stat_tracker.highest_scoring_visitor
   end
 
   def test_highest_scoring_home_team
-    # skip
+    skip
     assert_equal "Reign FC", @stat_tracker.highest_scoring_home_team
   end
 
   def test_lowest_scoring_visitor
-    # skip
+    skip
     assert_equal "San Jose Earthquakes", @stat_tracker.lowest_scoring_visitor
   end
 
   def test_lowest_scoring_home_team
-    # skip
+    skip
     assert_equal "Utah Royals FC", @stat_tracker.lowest_scoring_home_team
   end
 
   #Season Statistics
 
   def test_winningest_coach
-    skip
+    # skip
     assert_equal "Claude Julien", @stat_tracker.winningest_coach("20132014")
     assert_equal "Alain Vigneault", @stat_tracker.winningest_coach("20142015")
   end

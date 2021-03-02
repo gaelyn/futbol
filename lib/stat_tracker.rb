@@ -122,7 +122,7 @@ class StatTracker
     result = team_data.find {|team| team[:team_id] == id}
     result[:teamname]
   end
-
+  # Need test
   def away_goals_by_away_team_id
     grouped = {}
     games_data.each do |game|
@@ -139,7 +139,7 @@ class StatTracker
     result = averaged.max_by {|key, value| value}
     return_team_name_by_id(result[0])
   end
-
+   # Need Test
   def home_goals_by_home_team_id
     grouped = {}
     games_data.each do |game|
@@ -150,11 +150,6 @@ class StatTracker
   end
 
   def highest_scoring_home_team
-    # grouped = {}
-    # games_data.each do |game|
-    #   grouped[game[:home_team_id]] = [] if grouped[game[:home_team_id]].nil?
-    #   grouped[game[:home_team_id]] << game[:home_goals].to_f
-    # end
     averaged = home_goals_by_home_team_id.transform_values do |values|
       (values.sum / values.length).round(2)
     end
@@ -163,11 +158,6 @@ class StatTracker
   end
 
   def lowest_scoring_visitor
-    # grouped = {}
-    # games_data.each do |game|
-    #   grouped[game[:away_team_id]] = [] if grouped[game[:away_team_id]].nil?
-    #   grouped[game[:away_team_id]] << game[:away_goals].to_f
-    # end
     averaged = away_goals_by_away_team_id.transform_values do |values|
       (values.sum / values.length).round(2)
     end
@@ -176,11 +166,6 @@ class StatTracker
   end
 
   def lowest_scoring_home_team
-    # grouped = {}
-    # games_data.each do |game|
-    #   grouped[game[:home_team_id]] = [] if grouped[game[:home_team_id]].nil?
-    #   grouped[game[:home_team_id]] << game[:home_goals].to_f
-    # end
     averaged = home_goals_by_home_team_id.transform_values do |values|
       (values.sum / values.length).round(2)
     end
@@ -189,15 +174,24 @@ class StatTracker
   end
 
   # Season Statistics #########################
+  def list_game_id_by_season_id(season_id)
+    game_id = []
+    games_data.each do |game|
+      game_id << game[:game_id] if game[:season] == season_id
+    end
+    game_id
+  end
 
   def winningest_coach(season_id)
-    season = []
-    games_data.each do |game|
-      season << game[:game_id] if game[:season] == season_id
-    end
+    # require "pry";binding.pry
+    # season = []
+    # games_data.each do |game|
+      # season << game[:game_id] if game[:season] == season_id
+    # end
+    game_ids = list_game_id_by_season_id(season_id)
     result = {}
     game_teams_data.each do |game_team|
-      season.each do |game_id|
+      game_ids.each do |game_id|
         if game_id == game_team[:game_id]
           result[game_team[:head_coach]] = [] if result[game_team[:head_coach]].nil?
           result[game_team[:head_coach]] << game_team[:result]
