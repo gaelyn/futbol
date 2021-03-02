@@ -53,6 +53,7 @@ class StatTracker
   def percentage_visitor_wins
     (number_of_wins("away") / all_games.size).round(2)
   end
+
   # Need Test
   def number_of_wins(home_or_away)
     return false unless ["home", "away"].include?(home_or_away)
@@ -70,16 +71,13 @@ class StatTracker
   end
 
   def count_of_games_by_season
-    games_grouped_by_season.transform_values { |season| season.length}
+    games_grouped_by_season.transform_values { |season| season.length }
   end
 
   def average_goals_per_game
-    sum = 0
-    games_data.each do |game|
-      sum += game[:away_goals].to_i
-      sum += game[:home_goals].to_i
-    end
-    (sum.to_f / games_data.count).round(2)
+    sum = find_total_goals_per_game.sum
+    length = find_total_goals_per_game.length
+    (sum.fdiv(length)).round(2)
   end
 
   def average_goals_by_season
@@ -271,7 +269,7 @@ class StatTracker
     final = team_data.find {|team| team[:team_id] == least_accurate[0]}
     final[:teamname]
   end
-
+  # Need test
   def games_grouped_by_season
     games_data.group_by {|game| game[:season]}
   end
