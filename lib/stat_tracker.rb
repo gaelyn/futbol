@@ -133,6 +133,36 @@ class StatTracker
   end
 
   def highest_scoring_visitor
+    averaged = away_goals_by_away_team_id.transform_values do |values|
+      (values.sum / values.length).round(2)
+    end
+    result = averaged.max_by {|key, value| value}
+    return_team_name_by_id(result[0])
+  end
+
+  def home_goals_by_home_team_id
+    grouped = {}
+    games_data.each do |game|
+      grouped[game[:home_team_id]] = [] if grouped[game[:home_team_id]].nil?
+      grouped[game[:home_team_id]] << game[:home_goals].to_f
+    end
+    grouped
+  end
+
+  def highest_scoring_home_team
+    # grouped = {}
+    # games_data.each do |game|
+    #   grouped[game[:home_team_id]] = [] if grouped[game[:home_team_id]].nil?
+    #   grouped[game[:home_team_id]] << game[:home_goals].to_f
+    # end
+    averaged = home_goals_by_home_team_id.transform_values do |values|
+      (values.sum / values.length).round(2)
+    end
+    result = averaged.max_by {|key, value| value}
+    return_team_name_by_id(result[0])
+  end
+
+  def lowest_scoring_visitor
     # grouped = {}
     # games_data.each do |game|
     #   grouped[game[:away_team_id]] = [] if grouped[game[:away_team_id]].nil?
@@ -141,43 +171,17 @@ class StatTracker
     averaged = away_goals_by_away_team_id.transform_values do |values|
       (values.sum / values.length).round(2)
     end
-    result = averaged.max_by {|key, value| value}
-    return_team_name_by_id(result[0])
-  end
-
-  def highest_scoring_home_team
-    grouped = {}
-    games_data.each do |game|
-      grouped[game[:home_team_id]] = [] if grouped[game[:home_team_id]].nil?
-      grouped[game[:home_team_id]] << game[:home_goals].to_f
-    end
-    averaged = grouped.transform_values do |values|
-      (values.sum / values.length).round(2)
-    end
-    result = averaged.max_by {|key, value| value}
-    return_team_name_by_id(result[0])
-  end
-
-  def lowest_scoring_visitor
-    grouped = {}
-    games_data.each do |game|
-      grouped[game[:away_team_id]] = [] if grouped[game[:away_team_id]].nil?
-      grouped[game[:away_team_id]] << game[:away_goals].to_f
-    end
-    averaged = grouped.transform_values do |values|
-      (values.sum / values.length).round(2)
-    end
     result = averaged.min_by {|key, value| value}
     return_team_name_by_id(result[0])
   end
 
   def lowest_scoring_home_team
-    grouped = {}
-    games_data.each do |game|
-      grouped[game[:home_team_id]] = [] if grouped[game[:home_team_id]].nil?
-      grouped[game[:home_team_id]] << game[:home_goals].to_f
-    end
-    averaged = grouped.transform_values do |values|
+    # grouped = {}
+    # games_data.each do |game|
+    #   grouped[game[:home_team_id]] = [] if grouped[game[:home_team_id]].nil?
+    #   grouped[game[:home_team_id]] << game[:home_goals].to_f
+    # end
+    averaged = home_goals_by_home_team_id.transform_values do |values|
       (values.sum / values.length).round(2)
     end
     result = averaged.min_by {|key, value| value}
