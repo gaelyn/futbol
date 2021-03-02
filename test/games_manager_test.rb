@@ -38,6 +38,14 @@ class StatTrackerTest < Minitest::Test
   def test_it_can_find_lowest_total_score
     assert_equal 0, @game_manager.lowest_total_score
   end
+
+  def test_percentage_of_home_wins
+    assert_equal 0.44, @game_manager.percentage_home_wins
+  end
+
+  def test_percentage_of_visitor_wins
+    assert_equal 0.36, @game_manager.percentage_visitor_wins
+  end
   # def setup
   #   @game_path = './dummy_data/games_dummy.csv'
   #   @team_path = './dummy_data/teams_dummy.csv'

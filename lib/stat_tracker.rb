@@ -6,22 +6,12 @@ class StatTracker
               :team_data,
               :game_teams_data
 
-  # def initialize(locations)
-  #   # @locations = locations
-    # @games_data = CSV.parse(File.read('./data/games.csv'), headers: true, header_converters: :symbol)
-  #   @team_data = CSV.parse(File.read('./data/teams.csv'), headers: true, header_converters: :symbol)
-  #   @game_teams_data = CSV.parse(File.read('./data/game_teams.csv'), headers: true, header_converters: :symbol)
-  #   # @team_manager = TeamsManager.new(CSV.parse(File.read(locations[:teams]), headers: true, header_converters: :symbol), self)
-  #   # @games_manager = GamesManager.new(CSV.parse(File.read(locations[:games]), headers: true, header_converters: :symbol), self)
-  #   # @game_team_manager = GameTeamsManager.new(CSV.parse(File.read(locations[:game_teams]), headers: true, header_converters: :symbol), self)
-  # end
+  def initialize(locations)
+    load_manager(locations)
+  end
 
   def self.from_csv(locations)
     StatTracker.new(locations)
-  end
-
-  def initialize(locations)
-    load_manager(locations)
   end
 
   def load_manager(locations)
@@ -36,51 +26,32 @@ class StatTracker
 
 # Game Statistics ##################################
   def highest_total_score
-    # find_total_goals_per_game.max_by {|goals| goals}
     @game_manager.highest_total_score
   end
 
   def lowest_total_score
-    # find_total_goals_per_game.min_by {|goals| goals}
     @game_manager.lowest_total_score
   end
 
-  # Need Test
-  def find_total_goals_per_game
-    games_data.map {|game| game[:home_goals].to_i + game[:away_goals].to_i}
-  end
-
-  # Need Test
-  # def find_highest_home_team_score
-  #   result = games_data.max_by {|game| game[:home_goals]}
-  #   result[:home_goals].to_i
-  # end
-  #
-  # # Need Test
-  # def find_highest_away_team_score
-  #   result = games_data.max_by {|game| game[:away_goals]}
-  #   result[:away_goals].to_i
-  # end
-
   def percentage_home_wins
-    (number_of_wins("home") / all_games.size).round(2)
+    @game_manager.percentage_home_wins
   end
 
   def percentage_visitor_wins
-    (number_of_wins("away") / all_games.size).round(2)
+    @game_manager.percentage_visitor_wins
   end
 
-  # Need Test
-  def number_of_wins(home_or_away)
-    return false unless ["home", "away"].include?(home_or_away)
-    game_teams_data.find_all do |game|
-      (game[:hoa] == home_or_away) && (game[:result] == "WIN")
-    end.size.to_f
-  end
+  # # Need Test
+  # def number_of_wins(home_or_away)
+  #   return false unless ["home", "away"].include?(home_or_away)
+  #   game_teams_data.find_all do |game|
+  #     (game[:hoa] == home_or_away) && (game[:result] == "WIN")
+  #   end.size.to_f
+  # end
   # Need test
-  def all_games
-    games_data.find_all {|game| game}
-  end
+  # def all_games
+  #   games_data.find_all {|game| game}
+  # end
 
   def percentage_ties
     (1 - (percentage_home_wins + percentage_visitor_wins)).round(2)

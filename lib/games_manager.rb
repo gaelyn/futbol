@@ -28,6 +28,20 @@ class GameManager
     end.min
   end
 
+  def percentage_home_wins
+    result = @games.count do |count|
+      count.away_goals < count.home_goals
+    end
+    result.fdiv(@games.count).round(2)
+  end
+
+  def percentage_visitor_wins
+    result = @games.count do |count|
+      count.away_goals > count.home_goals
+    end
+    result.fdiv(@games.count).round(2)
+  end
+
   # def find_total_goals_per_game
   #   # games_data.map {|game| game[:home_goals].to_i + game[:away_goals].to_i}
   #   @games.map do |game|
