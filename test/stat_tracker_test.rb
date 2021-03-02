@@ -25,12 +25,12 @@ class StatTrackerTest < Minitest::Test
 
   # Game Statistics Tests
   def test_it_can_find_highest_score
-    # skip
+    skip
     assert_equal 11, @stat_tracker.highest_total_score
   end
 
   def test_you_can_find_lowest_total_score
-    # skip
+    skip
     assert_equal 0, @stat_tracker.lowest_total_score
   end
 
@@ -50,7 +50,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_count_games_by_season
-    skip
+    # skip
     expected = {
       "20122013"=>806,
       "20162017"=>1317,

@@ -25,33 +25,26 @@ class StatTracker
     find_total_goals_per_game.max_by {|goals| goals}
   end
 
+  def lowest_total_score
+    find_total_goals_per_game.min_by {|goals| goals}
+  end
+
+  # Need Test
   def find_total_goals_per_game
     games_data.map {|game| game[:home_goals].to_i + game[:away_goals].to_i}
   end
 
   # Need Test
-  def find_highest_home_team_score
-    result = games_data.max_by {|game| game[:home_goals]}
-    result[:home_goals].to_i
-  end
-
-  # Need Test
-  def find_highest_away_team_score
-    result = games_data.max_by {|game| game[:away_goals]}
-    result[:away_goals].to_i
-  end
-
-  def lowest_total_score
-    find_total_goals_per_game.min_by {|goals| goals}
-    # lowest_score = 100
-    # games_data.each do |game|
-    #   sum = game[:home_goals].to_i + game[:away_goals].to_i
-    #   if sum < lowest_score
-    #     lowest_score = sum
-    #   end
-    # end
-    # lowest_score
-  end
+  # def find_highest_home_team_score
+  #   result = games_data.max_by {|game| game[:home_goals]}
+  #   result[:home_goals].to_i
+  # end
+  #
+  # # Need Test
+  # def find_highest_away_team_score
+  #   result = games_data.max_by {|game| game[:away_goals]}
+  #   result[:away_goals].to_i
+  # end
 
   def percentage_home_wins
     (number_of_wins("home") / all_games.size).round(2)
@@ -60,14 +53,14 @@ class StatTracker
   def percentage_visitor_wins
     (number_of_wins("away") / all_games.size).round(2)
   end
-
+  # Need Test
   def number_of_wins(home_or_away)
     return false unless ["home", "away"].include?(home_or_away)
     game_teams_data.find_all do |game|
       (game[:hoa] == home_or_away) && (game[:result] == "WIN")
     end.size.to_f
   end
-
+  # Need test
   def all_games
     games_data.find_all {|game| game}
   end
@@ -77,10 +70,7 @@ class StatTracker
   end
 
   def count_of_games_by_season
-    game_count = games_data.group_by do |game|
-      game[:season]
-    end
-    final = game_count.transform_values { |season| season.length}
+    games_grouped_by_season.transform_values { |season| season.length}
   end
 
   def average_goals_per_game
@@ -283,9 +273,7 @@ class StatTracker
   end
 
   def games_grouped_by_season
-    games_data.group_by do |game|
-      game[:season]
-    end
+    games_data.group_by {|game| game[:season]}
   end
 
   def most_tackles(season_id)
