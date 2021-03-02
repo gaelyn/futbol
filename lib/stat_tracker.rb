@@ -93,9 +93,7 @@ class StatTracker
   # League Statistics ##########################
 
   def count_of_teams
-    number_of_teams = team_data.map do |team|
-      team
-    end
+    number_of_teams = team_data.map {|team| team}
     number_of_teams.count
   end
 

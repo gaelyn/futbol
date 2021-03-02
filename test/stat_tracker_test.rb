@@ -63,7 +63,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_average_goals_per_game
-    # skip
+    skip
     assert_equal 4.22, @stat_tracker.average_goals_per_game
   end
 
@@ -83,7 +83,7 @@ class StatTrackerTest < Minitest::Test
 
   #League Statistics Tests
   def test_it_can_count_number_of_teams
-    skip
+    # skip
     assert_equal 32, @stat_tracker.count_of_teams
   end
 
