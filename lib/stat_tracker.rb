@@ -381,6 +381,8 @@ class StatTracker
     goals[:goals].to_i
   end
 
+  ~*~*~ V i B e Z ~d(*_*)b~ V i B e Z ~*~*~
+
   def favorite_opponent(id)
     game_id = []
     game_teams_data.each do |team_id|
@@ -397,11 +399,8 @@ class StatTracker
       end
     end
     games_lost = games_played.transform_values { |value| (value.count("LOSS") / value.length.to_f) }
-
     most_losses = games_lost.max_by { |key, value| value }
-
-    find_team = team_data.find { |team| team[:team_id] == most_losses[0] }
-    find_team[:teamname]
+    return_team_name_by_id(most_losses[0])
   end
 
   def rival(id)
@@ -420,10 +419,7 @@ class StatTracker
       end
     end
     games_won = games_played.transform_values { |value| (value.count("WIN") / value.length.to_f) }
-
     most_wins = games_won.max_by { |key, value| value }
-
-    find_team = team_data.find { |team| team[:team_id] == most_wins[0] }
-    find_team[:teamname]
+    return_team_name_by_id(most_wins[0])
   end
 end
