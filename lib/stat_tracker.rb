@@ -71,7 +71,7 @@ class StatTracker
   end
 
   def count_of_games_by_season
-    games_grouped_by_season.transform_values { |season| season.length }
+    games_grouped_by_season.transform_values {|season| season.length}
   end
 
   def average_goals_per_game
@@ -97,15 +97,17 @@ class StatTracker
     number_of_teams.count
   end
 
-  def best_offense
+  def goals_grouped_by_team_id
     grouped = Hash.new{|hash, key| hash[key] = []}
     game_teams_data.each do |game_team|
       grouped[game_team[:team_id]] << game_team[:goals].to_i
     end
-    avg_score = grouped.map { |k,v| [k, (v.sum / v.count.to_f) ]}
-    max_avg = avg_score.max_by do |team, score|
-      score
-    end
+    grouped
+  end
+
+  def best_offense
+    average = goals_grouped_by_team_id.map {|team_id, goals| [team_id, (goals.sum / goals.count.to_f)]}
+    max_avg = average.max_by {|team, score| score}
     team_name = team_data.find do |team|
       team[:team_id] == max_avg[0]
     end

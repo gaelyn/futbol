@@ -83,7 +83,7 @@ class StatTrackerTest < Minitest::Test
 
   #League Statistics Tests
   def test_it_can_count_number_of_teams
-    # skip
+    skip
     assert_equal 32, @stat_tracker.count_of_teams
   end
 
@@ -93,7 +93,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_calculate_worst_offense
-        skip
+        # skip
     assert_equal "Utah Royals FC", @stat_tracker.worst_offense
   end
 
