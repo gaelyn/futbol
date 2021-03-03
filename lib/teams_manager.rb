@@ -28,4 +28,14 @@ class TeamManager
     end
     result.team_name
   end
+
+  def find_team(team_id)
+    @teams.find do |team|
+      team.team_id == team_id
+    end
+  end
+
+  def team_info(team_id)
+    find_team(team_id).team_info
+  end
 end

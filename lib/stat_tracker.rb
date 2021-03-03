@@ -188,16 +188,7 @@ class StatTracker
   # A hash with key/value pairs for the following attributes: team_id,
   # franchise_id, team_name, abbreviation, and link
   def team_info(team_id)
-    # team_info = team_data_string_headers.find do |team|
-    #   team["team_id"] == team_id
-    # end
-    # team_deets = team_info.to_h
-    # team_deets.delete("Stadium")
-    # team_deets["team_name"] = team_deets["teamName"]
-    # team_deets.delete("teamName")
-    # team_deets["franchise_id"] = team_deets["franchiseId"]
-    # team_deets.delete("franchiseId")
-    # team_deets
+    @team_manager.team_info(team_id)
   end
 
   def best_season(team_id)
