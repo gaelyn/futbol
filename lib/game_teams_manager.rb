@@ -103,6 +103,123 @@ class GameTeamsManager
     end
   end
 
+  def games_by_team_id
+    game_teams.group_by do |game|
+      game.team_id
+    end
+  end
+
+  def wins_by_team_id(team_id)
+    games_by_team_id[team_id].find_all {|game| game.result == "WIN"}
+  end
+  # Need test
+  def game_ids_by_team_id(team_id)
+    wins_by_team_id(team_id).map {|game| game.game_id}
+  end
+
+  def season_by_game_id(team_id)
+    games_by_id = []
+    game_ids_by_team_id(team_id).each do |id|
+      tracker.game_manager.games.each do |game|
+        games_by_id << game.season if game.game_id == id
+      end
+    end
+    games_by_id
+  end
+
+  def best_season(team_id)
+    seasons = season_by_game_id(team_id).group_by {|season| season}
+    season_count = seasons.transform_values {|value| value.count}
+    most_wins = season_count.max_by {|season, count| count}
+    most_wins[0]
+  end
+
+  def worst_season(team_id)
+    seasons = season_by_game_id(team_id).group_by {|season| season}
+    season_count = seasons.transform_values {|value| value.count}
+    least_wins = season_count.min_by {|season, count| count}
+    least_wins[0]
+  end
+
+  def game_result_by_team_id(team_id)
+    game_results = []
+    game_teams.each do |row|
+      game_results << row.result if row.team_id == team_id
+    end
+    game_result
+  end
+
+  def average_win_percentage(team_id)
+    game_result = game_result_by_team_id(team_id)
+    (game_result.count("WIN").fdiv(game_result.length)).round(2)
+  end
+
+  def most_goals_scored(team_id)
+    goals = games_by_team_id[team_id].max_by do |result|
+      result.goals
+    end
+    goals.goals.to_i
+  end
+
+  def fewest_goals_scored(team_id)
+    goals = games_by_team_id[team_id].min_by do |result|
+      result.goals
+    end
+    goals.goals.to_i
+  end
+
+  def favorite_opponent(id)
+    find_most_losses(id)
+  end
+
+  def rival(id)
+    find_most_wins(id)
+  end
+
+  def team_id_by_game_id(id)
+    game_id = []
+    game_teams.each do |team_id|
+      game_id << team_id.game_id if team_id.team_id == id
+    end
+    game_id
+  end
+
+  def hash_of_team_id_by_result(id)
+    games_played = {}
+    team_id_by_game_id(id).each do |games|
+      game_teams.each do |data|
+        if games == data.game_id && data.team_id != id
+          games_played[data.team_id] = [] if games_played[data.team_id].nil?
+          games_played[data.team_id] << data.result
+        end
+      end
+    end
+    games_played
+  end
+
+  def hash_of_results_to_average_lost(id)
+    hash_of_team_id_by_result(id).transform_values do |value|
+      (value.count("LOSS") / value.length.to_f)
+    end
+  end
+
+  def hash_of_results_to_average_won(id)
+    hash_of_team_id_by_result(id).transform_values do |value|
+      (value.count("WIN") / value.length.to_f)
+    end
+  end
+
+  def find_most_wins(id)
+    hash_of_results_to_average_won(id).max_by do |key, value|
+      value
+    end
+  end
+
+  def find_most_losses(id)
+    hash_of_results_to_average_lost(id).max_by do |key, value|
+      value
+    end
+  end
 
 
 
@@ -113,7 +230,7 @@ class GameTeamsManager
   #     (game_team.hoa == home_or_away) && (game[:result] == "WIN")
   #   end.size.to_f
   #   # return false unless ["home", "away"].include?(home_or_away)
-  #   # game_teams_data.find_all do |game|
+  #   # game_teams.find_all do |game|
   #   #   (game[:hoa] == home_or_away) && (game[:result] == "WIN")
   #   # end.size.to_f
   # end

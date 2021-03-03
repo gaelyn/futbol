@@ -188,118 +188,45 @@ class StatTracker
   # A hash with key/value pairs for the following attributes: team_id,
   # franchise_id, team_name, abbreviation, and link
   def team_info(team_id)
-    team_data_string_headers = CSV.parse(File.read('./data/teams.csv'), headers: true)
-    team_info = team_data_string_headers.find do |team|
-      # require "pry"; binding.pry
-      team["team_id"] == team_id
-    end
-    team_deets = team_info.to_h
-    team_deets.delete("Stadium")
-    team_deets["team_name"] = team_deets["teamName"]
-    team_deets.delete("teamName")
-    team_deets["franchise_id"] = team_deets["franchiseId"]
-    team_deets.delete("franchiseId")
-    team_deets
-  end
-  # Need test
-  def games_by_team_id
-    game_teams_data.group_by do |game|
-      game[:team_id]
-    end
-  end
-  # Need test
-  def wins_by_team_id(team_id)
-    games_by_team_id[team_id].find_all {|game| game[:result] == "WIN"}
-  end
-  # Need test
-  def game_ids_by_team_id(team_id)
-    wins_by_team_id(team_id).map {|game| game[:game_id]}
-  end
-  # Need test
-  def season_by_game_id(team_id)
-    games_by_id = []
-    game_ids_by_team_id(team_id).each do |id|
-      games_data.each do |game|
-        games_by_id << game[:season] if game[:game_id] == id
-      end
-    end
-    games_by_id
+    # team_info = team_data_string_headers.find do |team|
+    #   team["team_id"] == team_id
+    # end
+    # team_deets = team_info.to_h
+    # team_deets.delete("Stadium")
+    # team_deets["team_name"] = team_deets["teamName"]
+    # team_deets.delete("teamName")
+    # team_deets["franchise_id"] = team_deets["franchiseId"]
+    # team_deets.delete("franchiseId")
+    # team_deets
   end
 
   def best_season(team_id)
-    seasons = season_by_game_id(team_id).group_by {|season| season}
-    season_count = seasons.transform_values {|value| value.count}
-    most_wins = season_count.max_by {|season, count| count}
-    most_wins[0]
+    @game_team_manager.best_season(team_id)
   end
 
   def worst_season(team_id)
-    seasons = season_by_game_id(team_id).group_by {|season| season}
-    season_count = seasons.transform_values {|value| value.count}
-    least_wins = season_count.min_by {|season, count| count}
-    least_wins[0]
-  end
- # Need test
-  def game_result_by_team_id(team_id)
-    game_results = []
-    game_teams_data.each do |row|
-      game_results << row[:result] if row[:team_id] == team_id
-    end
-    game_results
+    @game_team_manager.worst_season(team_id)
   end
 
   def average_win_percentage(team_id)
-    game_result = game_result_by_team_id(team_id)
-    (game_result.count("WIN").fdiv(game_result.length)).round(2)
+    @game_team_manager.average_win_percentage(team_id)
   end
 
   def most_goals_scored(team_id)
-    goals = games_by_team_id[team_id].max_by {|result| result[:goals]}
-    goals[:goals].to_i
+    @game_team_manager.most_goals_scored(team_id)
   end
 
   def fewest_goals_scored(team_id)
-    goals = games_by_team_id[team_id].min_by {|result| result[:goals]}
-    goals[:goals].to_i
+    @game_team_manager.fewest_goals_scored(team_id)
   end
 
   def favorite_opponent(id)
-    game_id = []
-    game_teams_data.each do |team_id|
-      game_id << team_id[:game_id] if team_id[:team_id] == id
-    end
-
-    games_played = {}
-    game_id.each do |games|
-      game_teams_data.each do |data|
-        if games == data[:game_id] && data[:team_id] != id
-          games_played[data[:team_id]] = [] if games_played[data[:team_id]].nil?
-          games_played[data[:team_id]] << data[:result]
-        end
-      end
-    end
-    games_lost = games_played.transform_values { |value| (value.count("LOSS") / value.length.to_f) }
-    most_losses = games_lost.max_by { |key, value| value }
-    return_team_name_by_id(most_losses[0])
+    result = @game_team_manager.find_most_losses(id)
+    @team_manager.return_team_name_by_id(result[0])
   end
 
   def rival(id)
-    game_id = []
-    game_teams_data.each do |team_id|
-      game_id << team_id[:game_id] if team_id[:team_id] == id
-    end
-
-    games_played = {}
-    game_id.each do |games|
-      game_teams_data.each do |data|
-        if games == data[:game_id] && data[:team_id] != id
-          games_played[data[:team_id]] = [] if games_played[data[:team_id]].nil?
-          games_played[data[:team_id]] << data[:result]
-        end
-      end
-    end
-    games_won = games_played.transform_values { |value| (value.count("WIN") / value.length.to_f) }
-    most_wins = games_won.max_by { |key, value| value }
-    return_team_name_by_id(most_wins[0])
+    result = @game_team_manager.find_most_wins(id)
+    @team_manager.return_team_name_by_id(result[0])
   end
 end
