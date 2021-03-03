@@ -3,7 +3,8 @@ require 'CSV'
 class StatTracker
   attr_reader :games_data,
               :team_data,
-              :game_teams_data
+              :game_teams_data,
+              :game_manager
 
   def initialize(locations)
     load_manager(locations)
@@ -94,40 +95,14 @@ class StatTracker
 
   # Season Statistics #########################
 
-  # def winningest_coach(season_id)
-  #   game_ids = @game_manager.list_game_id_by_season_id(season_id)
-  #   # result = {}
-  #   # game_teams_data.each do |game_team|
-  #     game_ids.each do |game_id|
-  #       if game_id == game_team[:game_id]
-  #         # result[game_team[:head_coach]] = [] if result[game_team[:head_coach]].nil?
-  #         # result[game_team[:head_coach]] << game_team[:result]
-  #       end
-  #     end
-  #   end
-  #   average = result.transform_values do |value|
-  #     (value.count("WIN") / value.length.to_f)
-  #   end
-  #   winning_coach = average.max_by {|key, value| value}
-  #   winning_coach[0]
-  # end
+  def winningest_coach(season_id)
+    result = @game_team_manager.winningest_coach(season_id)
+    @game_team_manager.average_number_of_wins(result)
+  end
 
   def worst_coach(season_id)
-    game_ids = list_game_id_by_season_id(season_id)
-    result = {}
-    game_teams_data.each do |game_team|
-      game_id.each do |game_id|
-        if game_id == game_team[:game_id]
-          result[game_team[:head_coach]] = [] if result[game_team[:head_coach]].nil?
-          result[game_team[:head_coach]] << game_team[:result]
-        end
-      end
-    end
-    average = result.transform_values do |value|
-      (value.count("WIN") / value.length.to_f)
-    end
-    worst_coach = average.min_by {|key, value| value}
-    worst_coach[0]
+    result = @game_team_manager.worst_coach(season_id)
+    @game_team_manager.average_number_of_losses(result)
   end
 
   def most_accurate_team(season_id)
@@ -167,10 +142,6 @@ class StatTracker
     final = team_data.find {|team| team[:team_id] == least_accurate[0]}
     final[:teamname]
   end
-  # Need test
-  # def games_grouped_by_season
-  #   games_data.group_by {|game| game[:season]}
-  # end
 
   def most_tackles(season_id)
     result = []

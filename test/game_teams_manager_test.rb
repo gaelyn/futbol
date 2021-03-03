@@ -50,4 +50,14 @@ class GameTeamsManagerTest < Minitest::Test
     #need more specific test
     assert_instance_of Hash, @game_team_manager. game_team_results_by_head_coach
   end
+
+  def test_game_ids_by_head_coach
+    #need more specific test
+    assert_instance_of Hash, @game_team_manager. game_ids_by_head_coach
+  end
+
+  def test_average_number_of_losses
+    assert_equal
+  end
+
 end
