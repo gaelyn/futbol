@@ -42,10 +42,54 @@ class GameManager
     result.fdiv(@games.count).round(2)
   end
 
-  # def find_total_goals_per_game
-  #   # games_data.map {|game| game[:home_goals].to_i + game[:away_goals].to_i}
-  #   @games.map do |game|
-  #     game.home_goals.to_i + game.away_goals.to_i
-  #   end
-  # end
+  def percentage_ties
+    (1 - (percentage_home_wins + percentage_visitor_wins)).round(2)
+  end
+
+  def count_of_games_by_season
+    games_grouped_by_season.transform_values do |season|
+      season.length
+    end
+  end
+
+  def games_grouped_by_season
+    @games.group_by do |game|
+      game.season
+    end
+  end
+
+  def average_goals_per_game
+    sum = @games.sum do |game|
+      (game.home_goals.to_i + game.away_goals.to_i)
+    end.fdiv(@games.count).round(2)
+  end
+
+  def average_goals_by_season
+    result = {}
+    @games.each do |game|
+      goals = (game.away_goals.to_f + game.home_goals.to_f)
+      result[game.season] = [] if result[game.season].nil?
+      result[game.season].push(goals)
+    end
+    average = result.transform_values do |value|
+      (value.sum / value.length).round(2)
+    end
+  end
+
 end
+
+
+    # result = {}
+    # @games.each do |game|
+    #   goals = (game.away_goals.to_f + game.home_goals.to_f)
+    #   result[game.season] = [] if result[game.season].nil?
+    #   result[game,season].push(goals)
+    # end
+    # bucket = result.transform_values {|value| (value.sum / value.length).round(2)}
+    # result = {}
+    # games_data.each do |game|
+    #   goals = (game[:away_goals].to_f + game[:home_goals].to_f)
+    #   result[game[:season]] = [] if result[game[:season]].nil?
+    #   result[game[:season]].push(goals)
+    # end
+    # bucket = result.transform_values {|value| (value.sum / value.length).round(2)}

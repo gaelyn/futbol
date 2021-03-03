@@ -35,12 +35,12 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_percentage_of_home_wins
-    # skip
+    skip
     assert_equal 0.44, @stat_tracker.percentage_home_wins
   end
 
   def test_percentage_of_visitor_wins
-    # skip
+    skip
     assert_equal 0.36, @stat_tracker.percentage_visitor_wins
   end
 

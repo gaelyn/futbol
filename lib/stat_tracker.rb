@@ -15,12 +15,12 @@ class StatTracker
   end
 
   def load_manager(locations)
-   # @team_manager = TeamManager.new(load_csv(locations[:teams]), self)
+   @team_manager = TeamManager.new(load_csv(locations[:teams]), self)
    @game_manager = GameManager.new(load_csv(locations[:games]), self)
    # @game_team_manager = GameTeamManager.new(load_csv(locations[:game_teams]), self)
- end
+  end
 
- def load_csv(path)
+  def load_csv(path)
     CSV.parse(File.read(path), headers: true, header_converters: :symbol)
   end
 
@@ -41,47 +41,28 @@ class StatTracker
     @game_manager.percentage_visitor_wins
   end
 
-  # # Need Test
-  # def number_of_wins(home_or_away)
-  #   return false unless ["home", "away"].include?(home_or_away)
-  #   game_teams_data.find_all do |game|
-  #     (game[:hoa] == home_or_away) && (game[:result] == "WIN")
-  #   end.size.to_f
-  # end
-  # Need test
-  # def all_games
-  #   games_data.find_all {|game| game}
-  # end
-
   def percentage_ties
-    (1 - (percentage_home_wins + percentage_visitor_wins)).round(2)
+    @game_manager.percentage_ties
   end
 
   def count_of_games_by_season
-    games_grouped_by_season.transform_values {|season| season.length}
+    @game_manager.count_of_games_by_season
   end
 
   def average_goals_per_game
-    sum = find_total_goals_per_game.sum
-    length = find_total_goals_per_game.length
-    (sum.fdiv(length)).round(2)
+    @game_manager.average_goals_per_game
   end
 
   def average_goals_by_season
-    result = {}
-    games_data.each do |game|
-      goals = (game[:away_goals].to_f + game[:home_goals].to_f)
-      result[game[:season]] = [] if result[game[:season]].nil?
-      result[game[:season]].push(goals)
-    end
-    bucket = result.transform_values {|value| (value.sum / value.length).round(2)}
+    @game_manager.average_goals_by_season
   end
 
   # League Statistics ##########################
 
   def count_of_teams
-    number_of_teams = team_data.map {|team| team}
-    number_of_teams.count
+    @team_manager.count_of_teams
+    # number_of_teams = team_data.map {|team| team}
+    # number_of_teams.count
   end
   # Need test
   def goals_grouped_by_team_id
@@ -244,9 +225,9 @@ class StatTracker
     final[:teamname]
   end
   # Need test
-  def games_grouped_by_season
-    games_data.group_by {|game| game[:season]}
-  end
+  # def games_grouped_by_season
+  #   games_data.group_by {|game| game[:season]}
+  # end
 
   def most_tackles(season_id)
     result = []
