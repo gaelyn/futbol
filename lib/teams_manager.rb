@@ -1,19 +1,31 @@
-require 'CSV'
+require 'csv'
+require_relative './teams'
 
-class TeamsManager
-  attr_reader :games, :locations
+class TeamManager
+  attr_reader :teams, :tracker
 
-  def initialize(data, stat_tracker)
-    @data = data
-    @stat_tracker = stat_tracker
-    @games = []
+  def initialize(data, tracker)
+    @teams = []
+    @tracker = tracker
+    create_teams(data)
   end
 
-  def create_games(location)
-    result = CSV.parse(File.read(location), headers: true)
-    result.map do |row|
-      @games << Team.new(row, self)
+  def create_teams(data)
+    @teams = data.map do |data|
+      Team.new(data, self)
     end
   end
 
+  def count_of_teams
+    @teams.count do |team|
+      team
+    end
+  end
+
+  def return_team_name_by_id(id)
+    result = @teams.find do |team|
+      team.team_id == id
+    end
+    result.team_name
+  end
 end
