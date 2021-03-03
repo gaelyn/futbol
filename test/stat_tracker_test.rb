@@ -164,7 +164,7 @@ class StatTrackerTest < Minitest::Test
 
   #Team Statistics
   def test_it_can_list_team_info
-    skip
+    # skip
 
     expected = {
      "team_id" => "18",
@@ -203,7 +203,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_have_a_favorite_opponent
-    skip
+    # skip
     assert_equal "DC United", @stat_tracker.favorite_opponent("18")
   end
 

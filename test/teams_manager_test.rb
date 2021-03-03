@@ -38,4 +38,8 @@ class TeamManagerTest < Minitest::Test
     assert_equal "Atlanta United", @team_manager.return_team_name_by_id("1")
   end
 
+  def test_team_info
+
+    assert_equal___, @team_manager.team_info(" ")
+  end
 end
