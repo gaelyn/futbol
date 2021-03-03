@@ -76,20 +76,57 @@ class GameManager
     end
   end
 
+  def away_goals_by_away_team_id
+    grouped = {}
+    @games.each do |game|
+      grouped[game.away_team_id] = [] if grouped[game.away_team_id].nil?
+      grouped[game.away_team_id] << game.away_goals.to_f
+    end
+    grouped
+  end
+
+  def home_goals_by_home_team_id
+    grouped = {}
+    @games.each do |game|
+      grouped[game.home_team_id] = [] if grouped[game.home_team_id].nil?
+      grouped[game.home_team_id] << game.home_goals.to_f
+    end
+    grouped
+  end
+
+  def highest_scoring_visitor
+    averaged = away_goals_by_away_team_id.transform_values do |values|
+      (values.sum / values.length).round(2)
+    end
+    result = averaged.max_by {|key, value| value}
+  end
+
+  def highest_scoring_home_team
+    averaged = home_goals_by_home_team_id.transform_values do |values|
+      (values.sum / values.length).round(2)
+    end
+    result = averaged.max_by {|key, value| value}
+  end
+
+  def lowest_scoring_visitor
+    averaged = away_goals_by_away_team_id.transform_values do |values|
+      (values.sum / values.length).round(2)
+    end
+    result = averaged.min_by {|key, value| value}
+  end
+
+  def lowest_scoring_home_team
+    averaged = home_goals_by_home_team_id.transform_values do |values|
+      (values.sum / values.length).round(2)
+    end
+    result = averaged.min_by {|key, value| value}
+  end
+
+  def list_game_id_by_season_id(season_id)
+    game_id = []
+    @games.each do |game|
+      game_id << game.game_id if game.season == season_id
+    end
+    game_id
+  end
 end
-
-
-    # result = {}
-    # @games.each do |game|
-    #   goals = (game.away_goals.to_f + game.home_goals.to_f)
-    #   result[game.season] = [] if result[game.season].nil?
-    #   result[game,season].push(goals)
-    # end
-    # bucket = result.transform_values {|value| (value.sum / value.length).round(2)}
-    # result = {}
-    # games_data.each do |game|
-    #   goals = (game[:away_goals].to_f + game[:home_goals].to_f)
-    #   result[game[:season]] = [] if result[game[:season]].nil?
-    #   result[game[:season]].push(goals)
-    # end
-    # bucket = result.transform_values {|value| (value.sum / value.length).round(2)}

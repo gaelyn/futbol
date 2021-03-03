@@ -1,6 +1,5 @@
 require 'CSV'
 
-
 class StatTracker
   attr_reader :games_data,
               :team_data,
@@ -17,7 +16,7 @@ class StatTracker
   def load_manager(locations)
    @team_manager = TeamManager.new(load_csv(locations[:teams]), self)
    @game_manager = GameManager.new(load_csv(locations[:games]), self)
-   # @game_team_manager = GameTeamManager.new(load_csv(locations[:game_teams]), self)
+   @game_team_manager = GameTeamsManager.new(load_csv(locations[:game_teams]), self)
   end
 
   def load_csv(path)
@@ -61,113 +60,57 @@ class StatTracker
 
   def count_of_teams
     @team_manager.count_of_teams
-    # number_of_teams = team_data.map {|team| team}
-    # number_of_teams.count
-  end
-  # Need test
-  def goals_grouped_by_team_id
-    grouped = Hash.new{|hash, key| hash[key] = []}
-    game_teams_data.each do |game_team|
-      grouped[game_team[:team_id]] << game_team[:goals].to_i
-    end
-    grouped
   end
 
   def best_offense
-    average = goals_grouped_by_team_id.map {|team_id, goals| [team_id, (goals.sum / goals.count.to_f)]}
-    max_avg = average.max_by {|team, score| score}
-    return_team_name_by_id(max_avg[0])
+    result = @game_team_manager.best_offense
+    @team_manager.return_team_name_by_id(result[0])
   end
 
   def worst_offense
-    avg_score = goals_grouped_by_team_id.map {|team_id, goals| [team_id, (goals.sum / goals.count.to_f)]}
-    min_avg = avg_score.min_by {|team, score| score}
-    return_team_name_by_id(min_avg[0])
-  end
-
-  # Need test
-  def return_team_name_by_id(id)
-    result = team_data.find {|team| team[:team_id] == id}
-    result[:teamname]
-  end
-  # Need test
-  def away_goals_by_away_team_id
-    grouped = {}
-    games_data.each do |game|
-      grouped[game[:away_team_id]] = [] if grouped[game[:away_team_id]].nil?
-      grouped[game[:away_team_id]] << game[:away_goals].to_f
-    end
-    grouped
+    result = @game_team_manager.worst_offense
+    @team_manager.return_team_name_by_id(result[0])
   end
 
   def highest_scoring_visitor
-    averaged = away_goals_by_away_team_id.transform_values do |values|
-      (values.sum / values.length).round(2)
-    end
-    result = averaged.max_by {|key, value| value}
-    return_team_name_by_id(result[0])
-  end
-   # Need Test
-  def home_goals_by_home_team_id
-    grouped = {}
-    games_data.each do |game|
-      grouped[game[:home_team_id]] = [] if grouped[game[:home_team_id]].nil?
-      grouped[game[:home_team_id]] << game[:home_goals].to_f
-    end
-    grouped
+    result = @game_manager.highest_scoring_visitor
+    @team_manager.return_team_name_by_id(result[0])
   end
 
   def highest_scoring_home_team
-    averaged = home_goals_by_home_team_id.transform_values do |values|
-      (values.sum / values.length).round(2)
-    end
-    result = averaged.max_by {|key, value| value}
-    return_team_name_by_id(result[0])
+    result = @game_manager.highest_scoring_home_team
+    @team_manager.return_team_name_by_id(result[0])
   end
 
   def lowest_scoring_visitor
-    averaged = away_goals_by_away_team_id.transform_values do |values|
-      (values.sum / values.length).round(2)
-    end
-    result = averaged.min_by {|key, value| value}
-    return_team_name_by_id(result[0])
+    result = @game_manager.lowest_scoring_visitor
+    @team_manager.return_team_name_by_id(result[0])
   end
 
   def lowest_scoring_home_team
-    averaged = home_goals_by_home_team_id.transform_values do |values|
-      (values.sum / values.length).round(2)
-    end
-    result = averaged.min_by {|key, value| value}
-    return_team_name_by_id(result[0])
+    result = @game_manager.lowest_scoring_home_team
+    @team_manager.return_team_name_by_id(result[0])
   end
 
   # Season Statistics #########################
-  # Need test
-  def list_game_id_by_season_id(season_id)
-    game_id = []
-    games_data.each do |game|
-      game_id << game[:game_id] if game[:season] == season_id
-    end
-    game_id
-  end
 
-  def winningest_coach(season_id)
-    game_ids = list_game_id_by_season_id(season_id)
-    result = {}
-    game_teams_data.each do |game_team|
-      game_ids.each do |game_id|
-        if game_id == game_team[:game_id]
-          result[game_team[:head_coach]] = [] if result[game_team[:head_coach]].nil?
-          result[game_team[:head_coach]] << game_team[:result]
-        end
-      end
-    end
-    average = result.transform_values do |value|
-      (value.count("WIN") / value.length.to_f)
-    end
-    winning_coach = average.max_by {|key, value| value}
-    winning_coach[0]
-  end
+  # def winningest_coach(season_id)
+  #   game_ids = @game_manager.list_game_id_by_season_id(season_id)
+  #   # result = {}
+  #   # game_teams_data.each do |game_team|
+  #     game_ids.each do |game_id|
+  #       if game_id == game_team[:game_id]
+  #         # result[game_team[:head_coach]] = [] if result[game_team[:head_coach]].nil?
+  #         # result[game_team[:head_coach]] << game_team[:result]
+  #       end
+  #     end
+  #   end
+  #   average = result.transform_values do |value|
+  #     (value.count("WIN") / value.length.to_f)
+  #   end
+  #   winning_coach = average.max_by {|key, value| value}
+  #   winning_coach[0]
+  # end
 
   def worst_coach(season_id)
     game_ids = list_game_id_by_season_id(season_id)

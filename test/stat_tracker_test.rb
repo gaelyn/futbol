@@ -4,6 +4,8 @@ require 'minitest/pride'
 require './lib/stat_tracker'
 # require './test/test_helper'
 require './lib/games_manager'
+require './lib/teams_manager'
+require './lib/game_teams_manager'
 
 class StatTrackerTest < Minitest::Test
   def setup
@@ -82,13 +84,14 @@ class StatTrackerTest < Minitest::Test
 
 
   #League Statistics Tests
-  def test_it_can_count_number_of_teams
+  def test_count_of_teams
     skip
     assert_equal 32, @stat_tracker.count_of_teams
   end
 
   def test_it_can_calculate_best_offense
     skip
+    # Does not work with second assertion. Needs work.
     assert_equal "Reign FC", @stat_tracker.best_offense
   end
 

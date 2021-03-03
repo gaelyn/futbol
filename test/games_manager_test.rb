@@ -4,6 +4,8 @@ require 'minitest/pride'
 require './lib/stat_tracker'
 # require './test/test_helper'
 require './lib/games_manager'
+require './lib/teams_manager'
+require './lib/game_teams_manager'
 
 class GameManagerTest < Minitest::Test
   def setup
@@ -108,41 +110,39 @@ class GameManagerTest < Minitest::Test
       }
     assert_equal expected, @game_manager.average_goals_by_season
   end
-  # def setup
-  #   @game_path = './dummy_data/games_dummy.csv'
-  #   @team_path = './dummy_data/teams_dummy.csv'
-  #   @game_teams_path = './dummy_data/game_teams_dummy.csv'
-  #   @locations = {
-  #     games: @game_path,
-  #     teams: @team_path,
-  #     game_teams: @game_teams_path
-  #   }
-  #   @stat_tracker_method = StatTracker.from_csv(@locations)
-  #   @stat_tracker_instance = StatTracker.new(@locations)
-  # end
-  #
-  # def test_it_exists
-  #   games_manager = GamesManager.new(
-  #     @locations[:games],
-  #     StatTracker.from_csv(@locations)
-  #   )
-  #   assert_instance_of GamesManager, games_manager
-  # end
 
-  # def test_it_can_create_games
-  #   # skip
-  #   games_manager = GamesManager.new(
-  #     @locations[:games],
-  #     StatTracker.from_csv(@locations)
-  #   )
-  #   assert_equal [], games_manager.games
-  #   games_manager.create_games(@locations[:games])
-  #   assert_equal false, games_manager.games.empty?
-  # end
+  def test_away_goals_by_team_id
+    #Need more specific test
+    assert_instance_of Hash, @game_manager.away_goals_by_away_team_id
+  end
 
+  def test_home_goals_by_team_id
+    #Need more specific test
+    assert_instance_of Hash, @game_manager.home_goals_by_home_team_id
+  end
 
+  def test_highest_scoring_visitor
+    # skip
+    assert_equal ["6", 2.25], @game_manager.highest_scoring_visitor
+  end
 
+  def test_highest_scoring_home_team
+    # skip
+    assert_equal ["54", 2.59], @game_manager.highest_scoring_home_team
+  end
 
+  def test_lowest_scoring_visitor
+    # skip
+    assert_equal ["27", 1.85], @game_manager.lowest_scoring_visitor
+  end
 
+  def test_lowest_scoring_home_team
+    # skip
+    assert_equal ["7", 1.79], @game_manager.lowest_scoring_home_team
+  end
+
+  def test_list_game_id_by_season_id
+    assert_instance_of Array, @game_manager.list_game_id_by_season_id("20122013")
+  end
 
 end
