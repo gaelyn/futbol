@@ -121,7 +121,7 @@ class GameManagerTest < Minitest::Test
   end
 
   def test_list_game_id_by_season_id
-    #need more specific test
+
     assert_instance_of Array, @game_manager.list_game_id_by_season_id("20122013")
   end
 
