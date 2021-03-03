@@ -4,7 +4,9 @@ class StatTracker
   attr_reader :games_data,
               :team_data,
               :game_teams_data,
-              :game_manager
+              :game_manager,
+              :game_team_manager,
+              :team_manager
 
   def initialize(locations)
     load_manager(locations)
@@ -106,87 +108,22 @@ class StatTracker
   end
 
   def most_accurate_team(season_id)
-    result = games_grouped_by_season[season_id]
-
-    hash = {}
-    game_teams_data.each do |game_team|
-      result.each do |game|
-        if game[:game_id] == game_team[:game_id]
-          hash[game_team[:team_id]] = [] if hash[game_team[:team_id]].nil?
-          calculation = game_team[:goals].to_f / (game_team[:shots].to_f)
-          hash[game_team[:team_id]] << calculation
-        end
-      end
-    end
-    transformed = hash.transform_values {|value| value.sum / value.length}
-    most_accurate = transformed.max_by {|key, value| value}
-    final = team_data.find {|team| team[:team_id] == most_accurate[0]}
-    final[:teamname]
+    @game_manager.most_accurate_team(season_id)
   end
 
   def least_accurate_team(season_id)
-    result = games_grouped_by_season[season_id]
-
-    hash = {}
-    game_teams_data.each do |game_team|
-      result.each do |game|
-        if game[:game_id] == game_team[:game_id]
-          hash[game_team[:team_id]] = [] if hash[game_team[:team_id]].nil?
-          calculation = game_team[:goals].to_f / (game_team[:shots].to_f)
-          hash[game_team[:team_id]] << calculation
-        end
-      end
-    end
-    transformed = hash.transform_values {|value| value.sum / value.length}
-    least_accurate = transformed.min_by {|key, value| value}
-    final = team_data.find {|team| team[:team_id] == least_accurate[0]}
-    final[:teamname]
+    @game_manager.least_accurate_team(season_id)
   end
 
   def most_tackles(season_id)
-    result = []
-    games_data.each do |game|
-      result << game[:game_id] if game[:season] == season_id
-    end
-    hash = {}
-    game_teams_data.each do |game_team|
-      result.each do |game|
-        if game == game_team[:game_id]
-          hash[game_team[:team_id]] = [] if hash[game_team[:team_id]].nil?
-          hash[game_team[:team_id]] << game_team[:tackles].to_i
-        end
-      end
-    end
-    transformed = hash.transform_values {|value| value.sum}
-    tackles = transformed.max_by {|key, value| value}
-    find = team_data.find {|team| team[:team_id] == tackles[0]}
-    find[:teamname]
+    @game_manager.most_tackles(season_id)
   end
 
   def fewest_tackles(season_id)
-    result = []
-    games_data.each do |game|
-      result << game[:game_id] if game[:season] == season_id
-    end
-    hash = {}
-    game_teams_data.each do |game_team|
-      result.each do |game|
-        if game == game_team[:game_id]
-          hash[game_team[:team_id]] = [] if hash[game_team[:team_id]].nil?
-          hash[game_team[:team_id]] << game_team[:tackles].to_i
-        end
-      end
-    end
-    transformed = hash.transform_values {|value| value.sum}
-    tackles = transformed.min_by {|key, value| value}
-    find = team_data.find {|team| team[:team_id] == tackles[0]}
-    find[:teamname]
+    @game_mananger.most_tackles(season_id)
   end
 
   # Team Statistics ###############################
-
-  # A hash with key/value pairs for the following attributes: team_id,
-  # franchise_id, team_name, abbreviation, and link
   def team_info(team_id)
     @team_manager.team_info(team_id)
   end
