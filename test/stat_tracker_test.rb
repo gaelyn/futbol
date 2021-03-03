@@ -25,7 +25,6 @@ class StatTrackerTest < Minitest::Test
     assert_instance_of StatTracker, @stat_tracker
   end
 
-  # Game Statistics Tests
   def test_it_can_find_highest_score
     skip
     assert_equal 11, @stat_tracker.highest_total_score
@@ -82,8 +81,6 @@ class StatTrackerTest < Minitest::Test
     assert_equal expected, @stat_tracker.average_goals_by_season
   end
 
-
-  #League Statistics Tests
   def test_count_of_teams
     skip
     assert_equal 32, @stat_tracker.count_of_teams
@@ -119,8 +116,6 @@ class StatTrackerTest < Minitest::Test
     skip
     assert_equal "Utah Royals FC", @stat_tracker.lowest_scoring_home_team
   end
-
-  #Season Statistics
 
   def test_winningest_coach
     skip
@@ -161,8 +156,7 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Atlanta United", @stat_tracker.fewest_tackles("20132014")
     assert_equal "Orlando City SC", @stat_tracker.fewest_tackles("20142015")
   end
-
-  #Team Statistics
+-
   def test_it_can_list_team_info
     skip
 

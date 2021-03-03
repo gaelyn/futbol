@@ -54,31 +54,10 @@ class GameManagerTest < Minitest::Test
   end
 
   def test_it_can_group_games_by_season
-    skip
-    # Need more thought on test here. Mocks and stubs?
-    # game1 = mocks
-    # game1.stubs(season).return("20122013")
-    # game1.stubs(id).return(20122013)
-    #
-    # game2 = mocks
-    # game2.stubs(season).return("20132014")
-    # game2.stubs(id).return(2012030334)
-    #
-    # game3 = mocks
-    # game3.stubs(season).return("20132014")
-    # game3.stubs(id).return(2012030335)
-    #
-    # games = [game1, game2, game3]
-    # expected = {
-    #   "20132014" => [2012030334, 2012030335],
-    #   "20122013" => [20122013]
-    # }
-    #
-    # result = games.games_grouped_by_season
-    # assert_equal expected, result
-    # assert_includes @game_manager.games_grouped_by_season.keys, "20122013"
-    # assert_includes @game_manager.games_grouped_by_season.keys, "20132014"
-    # assert_includes @game_manager.games_grouped_by_season.keys, "20142015"
+    # skip
+    assert_includes @game_manager.games_grouped_by_season.keys, "20122013"
+    assert_includes @game_manager.games_grouped_by_season.keys, "20132014"
+    assert_includes @game_manager.games_grouped_by_season.keys, "20142015"
   end
 
   def test_it_can_count_games_by_season
@@ -146,4 +125,13 @@ class GameManagerTest < Minitest::Test
     assert_instance_of Array, @game_manager.list_game_id_by_season_id("20122013")
   end
 
+  def test_most_tackles
+    assert_equal "FC Cincinnati", @game_manager.most_tackles("20132014")
+    assert_equal "Seattle Sounders FC", @game_manager.most_tackles("20142015")
+  end
+
+  def test_least_tackles
+    assert_equal "Atlanta United", @game_manager.most_tackles("20132014")
+    assert_equal "Orlando City SC", @game_manager.most_tackles("20142015")
+  end
 end
