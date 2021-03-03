@@ -129,7 +129,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_worst_coach
-    # skip
+    skip
     name = "Ted Nolan"
     assert_equal "Peter Laviolette", @stat_tracker.worst_coach("20132014")
     assert_equal name, @stat_tracker.worst_coach("20142015")
@@ -179,7 +179,6 @@ class StatTrackerTest < Minitest::Test
 
   def test_best_season
     skip
-    # WORK IN PROGRESS
     assert_equal "20132014", @stat_tracker.best_season("6")
   end
 
@@ -209,7 +208,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_has_a_rival
-    skip
+    # skip
     # assert_equal "Houston Dash", @stat_tracker.rival("18")
     assert_equal "LA Galaxy", @stat_tracker.rival("18")
   end

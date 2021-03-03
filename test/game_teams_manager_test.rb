@@ -1,4 +1,4 @@
-require 'simplecov'
+  require 'simplecov'
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/stat_tracker'
@@ -57,7 +57,75 @@ class GameTeamsManagerTest < Minitest::Test
   end
 
   def test_average_number_of_losses
+
     assert_equal
   end
 
+  def test_game_by_team_id
+
+    assert_equal___, @game_team_manager.games_by_team_id
+  end
+
+  def test_wins_by_team_id
+
+    assert_equal_____, @game_team_manager.wins_by_team_id
+  end
+
+  def test_game_ids_by_team_id
+
+    assert_equal____, @game_team_manager.game_ids_by_team_id
+  end
+
+  def test_season_by_game_id
+
+    assert_equal___, @game_team_manager.season_by_game_id
+  end
+
+  def test_best_season
+    assert_equal "20132014", @game_team_manager.best_season("6")
+  end
+
+  def test_worst_season
+    assert_equal "20142015", @game_team_manager.worst_season("6")
+  end
+
+  def test_game_result_by_team_id
+
+    assert_equal___, @game_team_manager.game_result_by_team_id(" ")
+  end
+
+  def test_average_win_percentage
+
+    assert_equal___, @game_team_manager.average_win_percentage(" ")
+  end
+
+  def test_most_goals_scored
+
+    assert_equal___, @game_team_manager.most_goals_scored(" ")
+  end
+
+  def test_fewest_goals_scored
+
+    assert_equal___, @game_team_manager.fewest_goals_scored(" ")
+  end
+
+  def test_team_id_by_game_id
+
+    assert_equal___, @game_team_manager(" ")
+  end
+
+  def test_hash_of_team_id_by_result
+
+    assert_equal___, @game_team_manager.hash_of_team_id_by_result(" ")
+  end
+
+  def test_hash_of_results_to_average_lost
+
+    assert_equal___, @game_team_manager.hash_of_results_to_average_lost(" ")
+  end
+
+  def test_hash_of_results_to_average_won
+
+    assert_equal___, @game_team_manager.hash_of_results_to_average_won(" ")
+  end
 end
