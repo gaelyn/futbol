@@ -29,10 +29,6 @@ class GameManagerTest < Minitest::Test
     assert_instance_of GameManager, @game_manager
   end
 
-  # def test_find_total_goals_per_game
-  #   assert_instance_of Array, @game_manager.find_total_goals_per_game
-  # end
-
   def test_it_can_find_highest_total_score
     assert_equal 11, @game_manager.highest_total_score
   end
@@ -53,34 +49,6 @@ class GameManagerTest < Minitest::Test
     assert_equal 0.20, @game_manager.percentage_ties
   end
 
-  def test_it_can_group_games_by_season
-    skip
-    # Need more thought on test here. Mocks and stubs?
-    # game1 = mocks
-    # game1.stubs(season).return("20122013")
-    # game1.stubs(id).return(20122013)
-    #
-    # game2 = mocks
-    # game2.stubs(season).return("20132014")
-    # game2.stubs(id).return(2012030334)
-    #
-    # game3 = mocks
-    # game3.stubs(season).return("20132014")
-    # game3.stubs(id).return(2012030335)
-    #
-    # games = [game1, game2, game3]
-    # expected = {
-    #   "20132014" => [2012030334, 2012030335],
-    #   "20122013" => [20122013]
-    # }
-    #
-    # result = games.games_grouped_by_season
-    # assert_equal expected, result
-    # assert_includes @game_manager.games_grouped_by_season.keys, "20122013"
-    # assert_includes @game_manager.games_grouped_by_season.keys, "20132014"
-    # assert_includes @game_manager.games_grouped_by_season.keys, "20142015"
-  end
-
   def test_it_can_count_games_by_season
     expected = {
       "20122013"=>806,
@@ -94,12 +62,10 @@ class GameManagerTest < Minitest::Test
   end
 
   def test_average_goals_per_game
-    # skip
     assert_equal 4.22, @stat_tracker.average_goals_per_game
   end
 
   def test_average_goals_by_season
-    # skip
     expected = {
       "20122013"=>4.12,
       "20162017"=>4.23,
@@ -112,38 +78,41 @@ class GameManagerTest < Minitest::Test
   end
 
   def test_away_goals_by_team_id
-    #Need more specific test
     assert_instance_of Hash, @game_manager.away_goals_by_away_team_id
   end
 
   def test_home_goals_by_team_id
-    #Need more specific test
     assert_instance_of Hash, @game_manager.home_goals_by_home_team_id
   end
 
   def test_highest_scoring_visitor
-    # skip
     assert_equal ["6", 2.25], @game_manager.highest_scoring_visitor
   end
 
   def test_highest_scoring_home_team
-    # skip
     assert_equal ["54", 2.59], @game_manager.highest_scoring_home_team
   end
 
   def test_lowest_scoring_visitor
-    # skip
     assert_equal ["27", 1.85], @game_manager.lowest_scoring_visitor
   end
 
   def test_lowest_scoring_home_team
-    # skip
     assert_equal ["7", 1.79], @game_manager.lowest_scoring_home_team
   end
 
   def test_list_game_id_by_season_id
-    #need more specific test
     assert_instance_of Array, @game_manager.list_game_id_by_season_id("20122013")
   end
+
+  def test_most_tackles
+   assert_equal "FC Cincinnati", @game_manager.most_tackles("20132014")
+   assert_equal "Seattle Sounders FC", @game_manager.most_tackles("20142015")
+   end
+
+   def test_fewest_tackles
+     assert_equal "Atlanta United", @game_manager.fewest_tackles("20132014")
+     assert_equal "Orlando City SC", @game_manager.fewest_tackles("20142015")
+   end
 
 end

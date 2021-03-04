@@ -30,7 +30,6 @@ class TeamManagerTest < Minitest::Test
   end
 
   def test_count_of_teams
-    # skip
     assert_equal 32, @team_manager.count_of_teams
   end
 
@@ -39,7 +38,21 @@ class TeamManagerTest < Minitest::Test
   end
 
   def test_team_info
+    expected = {
+     "team_id" => "18",
+     "franchise_id" => "34",
+     "team_name" => "Minnesota United FC",
+     "abbreviation" => "MIN",
+     "link" => "/api/v1/teams/18"
+      }
+    assert_equal expected, @team_manager.team_info("18")
+  end
 
-    assert_equal___, @team_manager.team_info(" ")
+  def test_it_can_create_teams
+    assert_instance_of Array, @team_manager.teams
+  end
+
+  def test_it_can_find_team
+    assert_instance_of Team, @team_manager.find_team("3")
   end
 end

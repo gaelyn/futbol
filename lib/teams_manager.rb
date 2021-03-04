@@ -38,4 +38,5 @@ class TeamManager
   def team_info(team_id)
     find_team(team_id).team_info
   end
+
 end

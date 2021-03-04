@@ -130,7 +130,75 @@ class GameManager
     game_id
   end
 
-  
+  def most_accurate_team(season_id)
+    result = games_grouped_by_season[season_id]
+    hash = {}
+    @tracker.game_team_manager.game_teams.each do |game_team|
+      result.each do |game|
+        if game.game_id == game_team.game_id
+          hash[game_team.team_id] = [] if hash[game_team.team_id].nil?
+          calculation = game_team.goals.to_f / (game_team.shots.to_f)
+          hash[game_team.team_id] << calculation
+        end
+      end
+    end
+    transformed = hash.transform_values {|value| value.sum / value.length}
+    most_accurate = transformed.max_by {|key, value| value}
+    final = @tracker.team_manager.teams.find {|team| team.team_id == most_accurate[0]}
+    final.team_name
+  end
 
+  def least_accurate_team(season_id)
+    result = games_grouped_by_season[season_id]
+
+    hash = {}
+    @tracker.game_team_manager.game_teams.each do |game_team|
+      result.each do |game|
+        if game.game_id == game_team.game_id
+          hash[game_team.team_id] = [] if hash[game_team.team_id].nil?
+          calculation = game_team.goals.to_f / (game_team.shots.to_f)
+          hash[game_team.team_id] << calculation
+        end
+      end
+    end
+    transformed = hash.transform_values {|value| value.sum / value.length}
+    least_accurate = transformed.min_by {|key, value| value}
+    final = @tracker.team_manager.teams.find {|team| team.team_id == least_accurate[0]}
+    final.team_name
+  end
+
+  def most_tackles(season_id)
+    result = list_game_id_by_season_id(season_id)
+    hash = {}
+    @tracker.game_team_manager.game_teams.each do |game_team|
+      result.each do |game|
+        if game == game_team.game_id
+          hash[game_team.team_id] = [] if hash[game_team.team_id].nil?
+          hash[game_team.team_id] << game_team.tackles.to_i
+        end
+      end
+    end
+    transformed = hash.transform_values {|value| value.sum}
+    tackles = transformed.max_by {|key, value| value}
+    find = @tracker.team_manager.teams.find {|team| team.team_id == tackles[0]}
+    find.team_name
+  end
+
+  def fewest_tackles(season_id)
+    result = list_game_id_by_season_id(season_id)
+    hash = {}
+    @tracker.game_team_manager.game_teams.each do |game_team|
+      result.each do |game|
+        if game == game_team.game_id
+          hash[game_team.team_id] = [] if hash[game_team.team_id].nil?
+          hash[game_team.team_id] << game_team.tackles.to_i
+        end
+      end
+    end
+    transformed = hash.transform_values {|value| value.sum}
+    tackles = transformed.min_by {|key, value| value}
+    find = @tracker.team_manager.teams.find {|team| team.team_id == tackles[0]}
+    find.team_name
+  end
 
 end
