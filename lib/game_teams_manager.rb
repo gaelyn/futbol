@@ -112,7 +112,7 @@ class GameTeamsManager
   def wins_by_team_id(team_id)
     games_by_team_id[team_id].find_all {|game| game.result == "WIN"}
   end
-  
+
   def game_ids_by_team_id(team_id)
     wins_by_team_id(team_id).map {|game| game.game_id}
   end
@@ -146,7 +146,7 @@ class GameTeamsManager
     game_teams.each do |row|
       game_results << row.result if row.team_id == team_id
     end
-    game_result
+    game_results
   end
 
   def average_win_percentage(team_id)

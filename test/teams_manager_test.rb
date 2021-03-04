@@ -30,7 +30,6 @@ class TeamManagerTest < Minitest::Test
   end
 
   def test_count_of_teams
-    # skip
     assert_equal 32, @team_manager.count_of_teams
   end
 

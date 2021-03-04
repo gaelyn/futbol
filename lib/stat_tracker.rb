@@ -29,7 +29,6 @@ class StatTracker
     CSV.parse(File.read(path), headers: true, header_converters: :symbol)
   end
 
-# Game Statistics ##################################
   def highest_total_score
     @game_manager.highest_total_score
   end
@@ -61,8 +60,6 @@ class StatTracker
   def average_goals_by_season
     @game_manager.average_goals_by_season
   end
-
-  # League Statistics ##########################
 
   def count_of_teams
     @team_manager.count_of_teams
@@ -98,8 +95,6 @@ class StatTracker
     @team_manager.return_team_name_by_id(result[0])
   end
 
-  # Season Statistics #########################
-
   def winningest_coach(season_id)
     result = @game_team_manager.winningest_coach(season_id)
     @game_team_manager.average_number_of_wins(result)
@@ -123,10 +118,9 @@ class StatTracker
   end
 
   def fewest_tackles(season_id)
-    @game_mananger.most_tackles(season_id)
+    @game_manager.fewest_tackles(season_id)
   end
 
-  # Team Statistics ###############################
   def team_info(team_id)
     @team_manager.team_info(team_id)
   end

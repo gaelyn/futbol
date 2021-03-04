@@ -168,6 +168,7 @@ class GameManager
   end
 
   def most_tackles(season_id)
+    result = list_game_id_by_season_id(season_id)
     hash = {}
     @tracker.game_team_manager.game_teams.each do |game_team|
       result.each do |game|
@@ -180,10 +181,11 @@ class GameManager
     transformed = hash.transform_values {|value| value.sum}
     tackles = transformed.max_by {|key, value| value}
     find = @tracker.team_manager.teams.find {|team| team.team_id == tackles[0]}
-    find.teamname
+    find.team_name
   end
 
   def fewest_tackles(season_id)
+    result = list_game_id_by_season_id(season_id)
     hash = {}
     @tracker.game_team_manager.game_teams.each do |game_team|
       result.each do |game|
@@ -194,9 +196,9 @@ class GameManager
       end
     end
     transformed = hash.transform_values {|value| value.sum}
-    tackles = transformed.max_by {|key, value| value}
+    tackles = transformed.min_by {|key, value| value}
     find = @tracker.team_manager.teams.find {|team| team.team_id == tackles[0]}
-    find.teamname
+    find.team_name
   end
 
 end
