@@ -112,7 +112,7 @@ class GameTeamsManager
   def wins_by_team_id(team_id)
     games_by_team_id[team_id].find_all {|game| game.result == "WIN"}
   end
-  # Need test
+  
   def game_ids_by_team_id(team_id)
     wins_by_team_id(team_id).map {|game| game.game_id}
   end
@@ -220,18 +220,4 @@ class GameTeamsManager
       value
     end
   end
-
-
-
-
-  # def number_of_wins(home_or_away)
-  #   return false unless ["home", "away"].include?(home_or_away)
-  #   game_teams.find_all do |game_team|
-  #     (game_team.hoa == home_or_away) && (game[:result] == "WIN")
-  #   end.size.to_f
-  #   # return false unless ["home", "away"].include?(home_or_away)
-  #   # game_teams.find_all do |game|
-  #   #   (game[:hoa] == home_or_away) && (game[:result] == "WIN")
-  #   # end.size.to_f
-  # end
 end

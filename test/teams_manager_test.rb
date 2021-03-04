@@ -46,6 +46,14 @@ class TeamManagerTest < Minitest::Test
      "abbreviation" => "MIN",
      "link" => "/api/v1/teams/18"
       }
-    assert_equal result, @team_manager.team_info("18")
+    assert_equal expected, @team_manager.team_info("18")
+  end
+
+  def test_it_can_create_teams
+    assert_instance_of Array, @team_manager.teams
+  end
+
+  def test_it_can_find_team
+    assert_instance_of Team, @team_manager.find_team("3")
   end
 end

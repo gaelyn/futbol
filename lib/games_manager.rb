@@ -168,10 +168,6 @@ class GameManager
   end
 
   def most_tackles(season_id)
-    # result = []
-    # games_data.each do |game|
-    #   result << game[:game_id] if game[:season] == season_id
-    # end
     hash = {}
     @tracker.game_team_manager.game_teams.each do |game_team|
       result.each do |game|
